@@ -1,0 +1,8 @@
+<h3>Усі місця</h3>
+<ol>
+  <span (click)="addNewPlace()">Add new place</span>
+  <li *ngFor="#place of places">
+    <!-- each place goes here-->
+      <place-detail [place]=place (click)="gotoDetail(place)"></place-detail>
+  </li>
+</ol>

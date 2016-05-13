@@ -1,0 +1,7 @@
+.edited::after {
+  content: "save";
+}
+
+.saved::before {
+  content: "edit";
+}
