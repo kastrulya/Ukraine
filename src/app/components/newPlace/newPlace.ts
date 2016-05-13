@@ -4,13 +4,16 @@
 import {Component} from 'angular2/core';
 import {Place} from '../place/place';
 import {PlaceService} from '../../services/place/placeService';
+import {Router} from 'angular2/router';
 
 @Component({
   selector: 'new-place',
-  templateUrl: 'app/components/newPlace/newPlace.html'
+  templateUrl: 'app/components/newPlace/newPlace.html',
+  styleUrls: ['app/components/newPlace/newPlace.css']
 })
 export class NewPlace {
   constructor(
+    private _router: Router,
     private _placeService: PlaceService
   ){}
 
@@ -20,5 +23,7 @@ export class NewPlace {
     let place = new Place(title, description);
     this._placeService.createPlace(place);
 
+    let link = ['Places'];
+    this._router.navigate(link);
   }
 }

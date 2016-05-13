@@ -20,7 +20,8 @@ import {PlaceService} from './services/place/placeService';
   { path: '/about',      component: About,       name: 'About' },
   { path: '/places',     component: Places,      name: 'Places', useAsDefault: true },
   { path: '/place/:title', component: FullPlace, name: 'FullPlace' },
-  { path: 'places/add', component: NewPlace,     name: 'NewPlace' }
+  { path: 'places/add', component: NewPlace,     name: 'NewPlace' },
+  //{ path: 'profile', component: NewPlace, name: 'Profile' }
 ])
 export class SeedApp {
 

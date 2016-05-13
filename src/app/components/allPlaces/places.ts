@@ -23,7 +23,16 @@ export class Places implements OnInit{
   ){}
 
   ngOnInit(){
-    this.places = this._placeService.getPlaces();
+    //this.places = this._placeService.getPlaces();
+    this.getPlaces();
+  }
+
+  getPlaces(){
+    this._placeService.getPlaces()
+                      .subscribe(
+                        places => this.places = places
+                        //error => this.errorMessage = <any>error
+                        );
   }
 
   onSelect(place){
