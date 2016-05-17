@@ -30,7 +30,10 @@ export class Places implements OnInit{
   getPlaces(){
     this._placeService.getPlaces()
                       .subscribe(
-                        places => this.places = places
+                        places => {
+                          this.places = places;
+                          console.log(this);
+                        }
                         //error => this.errorMessage = <any>error
                         );
   }
@@ -39,7 +42,7 @@ export class Places implements OnInit{
     //
   }
   gotoDetail(place: Place){
-    let link = ['FullPlace', {title: place.title}];
+    let link = ['FullPlace', {objId: place.objectId}];
     this._router.navigate(link);
   }
 
@@ -47,5 +50,4 @@ export class Places implements OnInit{
     let link = ['NewPlace'];
     this._router.navigate(link);
   }
-
 }

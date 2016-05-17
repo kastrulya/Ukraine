@@ -21,8 +21,7 @@ export class NewPlace {
     let title = (<HTMLInputElement>document.getElementById("title")).value;
     let description = (<HTMLInputElement>document.getElementById("description")).value;
     let place = new Place(title, description);
-    this._placeService.createPlace(place);
-
+    this._placeService.createPlace(place).subscribe();
     let link = ['Places'];
     this._router.navigate(link);
   }

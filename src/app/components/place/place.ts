@@ -3,10 +3,9 @@
  */
 export class Place {
   constructor(
-    //public id : string,
     public title : string,
     public description : string,
-    public like : number = 0,
-    public tags : string[] = []
+    public objectId : string = '',
+    public likes : number = 0
   ){}
 }

@@ -1,8 +1,8 @@
 /**
  * Created by bubble on 25.04.16.
  */
-import {Component, OnInit} from 'angular2/core';
-import {RouteParams} from 'angular2/router';
+import {Component, OnInit, Input} from 'angular2/core';
+import {RouteParams, Router} from 'angular2/router';
 import {Place} from '../place/place';
 import {PlaceService} from '../../services/place/placeService';
 
@@ -14,22 +14,39 @@ import {PlaceService} from '../../services/place/placeService';
 export class FullPlace implements OnInit{
   place: Place;
   constructor (
+    private _router: Router,
     private _routeParams: RouteParams,
     private _placeService: PlaceService
   ){}
 
   ngOnInit(){
-    let title = this._routeParams.get('title');
-    this.place = this._placeService.getPlace(title);
+    let objId = this._routeParams.get('objId');
+    this.getPlace(objId);
+  }
+
+  getPlace(objId){
+    this._placeService.getPlace(objId)
+      .subscribe(
+        place => {
+          this.place = place;
+          console.log(this.place);
+        }
+      //error => this.errorMessage = <any>error
+        );
   }
 
   like(){
-    this.place.like += 1;
+    this.place.likes += 1;
   }
 
   delete(){
-    this._placeService.deletePlace(this.place);
-    window.history.back();
+    this._placeService.deletePlace(this.place).
+                      subscribe(
+                        ()=>{
+                          let link = ['Places'];
+                          this._router.navigate(link);
+                        }
+                      );
   }
 
 
@@ -55,5 +72,4 @@ export class FullPlace implements OnInit{
     button.classList.toggle('edited');
     button.classList.toggle('saved');
   }
-
 }

@@ -1,7 +1,9 @@
 <div>
-  <input type="text" value="{{place.title}}" readonly id="title"><span (click)="editTitle()" id="editTitle" class="button saved"></span>
+  <input type="text" value="{{place?.title}}" readonly id="title">
+  <span (click)="editTitle()" id="editTitle" class="button saved"></span>
   <br>
-  <textarea id="description" rows="4" cols="50" readonly>{{place.description}}</textarea><span id="editDescription" (click)="editDescription()" class="button saved"></span>
-  <div class="button like" (click)="like()"> ♥ {{place.like}} </div>
+  <textarea id="description" rows="4" cols="50" readonly>{{place?.description}}</textarea>
+  <span id="editDescription" (click)="editDescription()" class="button saved"></span>
+  <div class="button like" (click)="like()"> ♥ {{place?.likes}} </div>
   <div class="button delete" (click)="delete()">X Delete</div>
 </div>
