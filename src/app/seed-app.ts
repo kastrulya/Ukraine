@@ -6,6 +6,9 @@ import {Places} from './components/allPlaces/places';
 import {FullPlace} from './components/fullPlace/fullPlace';
 import {NewPlace} from './components/newPlace/newPlace';
 import {PlaceService} from './services/place/placeService';
+import {Register} from './components/auth/register/register';
+import {Login} from './components/auth/login/login';
+import {Logout} from './components/auth/logout/logout';
 
 @Component({
   selector: 'seed-app',
@@ -13,7 +16,7 @@ import {PlaceService} from './services/place/placeService';
     PlaceService
   ],
   pipes: [],
-  directives: [ROUTER_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, Logout],
   templateUrl: 'app/seed-app.html',
 })
 @RouteConfig([
@@ -21,7 +24,8 @@ import {PlaceService} from './services/place/placeService';
   { path: '/places',     component: Places,      name: 'Places', useAsDefault: true },
   { path: '/place/:objId', component: FullPlace, name: 'FullPlace' },
   { path: 'places/add', component: NewPlace,     name: 'NewPlace' },
-  //{ path: 'profile', component: NewPlace, name: 'Profile' }
+  { path: 'register', component: Register, name: 'Register' },
+  { path: 'login', component: Login, name: 'Login' }
 ])
 export class SeedApp {
 
