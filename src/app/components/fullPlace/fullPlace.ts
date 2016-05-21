@@ -1,70 +1,74 @@
 /**
  * Created by bubble on 25.04.16.
  */
-import {Component, OnInit, Input} from 'angular2/core';
-import {RouteParams, Router} from 'angular2/router';
-import {Place} from '../place/place';
-import {PlaceService} from '../../services/place/placeService';
+import {Component, OnInit} from "angular2/core";
+import {RouteParams, Router} from "angular2/router";
+import {PlaceService} from "../../services/placeService";
+import {LikeService} from "../../services/likeService";
+import {Place} from "../entities/place";
+import {DisplayTag} from "../entities/DisplayTag";
+const Backendless = require('backendless');
 
 @Component({
   selector: 'full-place',
-  templateUrl: 'app/components/fullPlace/fullPlace.html',
+  templateUrl: 'app/components/full' +
+  'Place/fullPlace.html',
   styleUrls: ['app/components/fullPlace/fullPlace.css']
 })
-export class FullPlace implements OnInit{
-  place: Place;
-  constructor (
-    private _router: Router,
-    private _routeParams: RouteParams,
-    private _placeService: PlaceService
-  ){}
+export class FullPlace implements OnInit {
+  place:Place;
+  count:number;
+  tags:DisplayTag[];
+  user:Backendless.User;
 
-  ngOnInit(){
+  constructor(private _router:Router,
+              private _routeParams:RouteParams,
+              private _placeService:PlaceService,
+              private  _likeService:LikeService) {
+  }
+
+  ngOnInit() {
     let objId = this._routeParams.get('objId');
     this.getPlace(objId);
+    this.getTags(objId);
   }
 
-  getPlace(objId){
+  getPlace(objId) {
     this._placeService.getPlace(objId)
-      .subscribe(
-        place => {
-          this.place = place;
-          console.log(this.place);
-        }
-      //error => this.errorMessage = <any>error
-        );
+      .then(place => this.place = place);
   }
 
-  like(){
-    this.place.likes += 1;
+  like() {
+    Backendless.UserService.getCurrentUser().then(user => {
+      // this._likeService.likePlace(this.place, user);
+    });
   }
 
-  delete(){
-    this._placeService.deletePlace(this.place).
-                      subscribe(
-                        ()=>{
-                          let link = ['Places'];
-                          this._router.navigate(link);
-                        }
-                      );
+  delete() {
+    this._placeService.deletePlace(this.place).then(
+      ()=> {
+        let link = ['Places'];
+        this._router.navigate(link);
+      }
+    );
   }
 
 
-  editDescription(){
+  editDescription() {
     console.log('description will be changed');
     let field = <HTMLInputElement>document.getElementById('description');
     let button = document.getElementById('editDescription');
     this.toggleEditing(field, button);
   }
 
-  editTitle(event){
+  editTitle(event) {
     console.log('title will be changed');
     let field = <HTMLInputElement>document.getElementById('title');
     let button = document.getElementById('editTitle');
     this.toggleEditing(field, button);
   }
 
-  toggleEditing(field: HTMLInputElement, button: HTMLElement) {
+  toggleEditing(field:HTMLInputElement, button:HTMLElement) {
     if (field.readOnly) {
       field.readOnly = false;
       field.focus();
@@ -72,4 +76,11 @@ export class FullPlace implements OnInit{
     button.classList.toggle('edited');
     button.classList.toggle('saved');
   }
+
+  getTags(placeId : string) {
+    return this._likeService
+      .getLikedTags(placeId)
+      .then(tagsCount => this.tags = tagsCount);
+  }
+
 }
