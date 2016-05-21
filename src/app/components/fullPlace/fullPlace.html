@@ -1,9 +1,19 @@
+<!--<div>-->
+  <!--<input type="text" value="{{place?.name}}" readonly id="name">-->
+  <!--<span (click)="editTitle()" id="editTitle" class="button saved"></span>-->
+  <!--<br>-->
+  <!--<textarea id="description" rows="4" cols="50" readonly>{{place?.description}}</textarea>-->
+  <!--<span id="editDescription" (click)="editDescription()" class="button saved"></span>-->
+  <!--<div class="button like" (click)="like()"> ♥ {{place?.likes}} </div>-->
+  <!--<div class="button delete" (click)="delete()">X Delete</div>-->
+<!--</div>-->
+
 <div>
-  <input type="text" value="{{place?.title}}" readonly id="title">
-  <span (click)="editTitle()" id="editTitle" class="button saved"></span>
-  <br>
-  <textarea id="description" rows="4" cols="50" readonly>{{place?.description}}</textarea>
-  <span id="editDescription" (click)="editDescription()" class="button saved"></span>
-  <div class="button like" (click)="like()"> ♥ {{place?.likes}} </div>
+  <h2>{{place?.name}}</h2>
+  <p>Lorem ipsum</p>
+  <div class="button like" > ♥ {{count}} </div>
+    <!--<li *ngFor="#tag of tags">{{tag.tag.name}} {{tag.count}}</li>-->
+  <span class="tag" *ngFor="#tag of tags" >{{tag.tag.name}} {{tag.count}}</span>
   <div class="button delete" (click)="delete()">X Delete</div>
+
 </div>

@@ -2,13 +2,12 @@
  * Created by bubble on 20.04.16.
  */
 
-import {Component, OnInit} from 'angular2/core';
-import {Router} from 'angular2/router';
-
-import {Place} from '../place/place';
-import {PlaceDetail} from '../placeDetail/placeDetail';
-
-import {PlaceService} from '../../services/place/placeService';
+import {Component, OnInit} from "angular2/core";
+import {Router} from "angular2/router";
+import {PlaceDetail} from "../placeDetail/placeDetail";
+import {PlaceService} from "../../services/placeService";
+import {Place} from "../entities/place";
+const Backendless = require('backendless');
 
 @Component({
   selector: 'places',
@@ -16,7 +15,7 @@ import {PlaceService} from '../../services/place/placeService';
   directives: [PlaceDetail]
 })
 export class Places implements OnInit{
-  places :Place[];
+  places : Place[];
   constructor(
     private _router: Router,
     private _placeService: PlaceService
@@ -28,22 +27,7 @@ export class Places implements OnInit{
   }
 
   getPlaces(){
-    this._placeService.getPlaces()
-                      .subscribe(
-                        places => {
-                          this.places = places;
-                          console.log(this);
-                        }
-                        //error => this.errorMessage = <any>error
-                        );
-  }
-
-  onSelect(place){
-    //
-  }
-  gotoDetail(place: Place){
-    let link = ['FullPlace', {objId: place.objectId}];
-    this._router.navigate(link);
+    this._placeService.getPlaces().then( res => this.places = res.data );
   }
 
   addNewPlace(){

@@ -7,10 +7,11 @@ import {SeedApp} from './app/seed-app';
 
 const Backendless = require('backendless');
 
-var APP_ID:string = 'B0AC80E0-CF9A-FAAD-FFC1-D9494E29AB00';
-var APP_KEY:string = '44DF80AC-A385-0F97-FF75-B21ABFC0BB00';
+var APP_ID:string = '7B2AF945-909B-6DB6-FF64-C772BC00BD00';
+var APP_KEY:string = 'ED9F0C34-3A5E-CB75-FF86-0E4AE53E1400';
 var APP_VER:string = 'v1';
 Backendless.initApp(APP_ID, APP_KEY, APP_VER);
+Backendless.enablePromises();
 
 bootstrap(SeedApp, [
   HTTP_PROVIDERS,

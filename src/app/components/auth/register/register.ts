@@ -2,10 +2,10 @@
  * Created by bubble on 18.05.16.
  */
 
-import {Component, Input} from 'angular2/core';
-import {RouteParams, Router} from 'angular2/router';
-//import {User} from '../entities/user/user';
-//import {UserService} from '../../services/user/user';
+import {Component} from "angular2/core";
+import {Router} from "angular2/router";
+const Backendless = require('backendless');
+
 
 @Component({
   selector: 'register',

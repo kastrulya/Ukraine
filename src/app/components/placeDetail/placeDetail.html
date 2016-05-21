@@ -1,4 +1,22 @@
-<div>
-  <h3>{{place.title}}</h3>
-  <p>{{place.description}}</p>
-</div>
+<!--<div class="mdl-grid">-->
+  <!--<div class="demo-card-wide mdl-card mdl-shadow&#45;&#45;2dp mdl-cell mdl-cell&#45;&#45;4-col">-->
+    <div class="mdl-card__title">
+      <h2 class="mdl-card__title-text">{{place.name}}</h2>
+    </div>
+    <div class="mdl-card__supporting-text">
+      {{place.description}}
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <a class="mdl-button mdl-button--colored mdl-js-ripple-effect" (click)="gotoDetail(place)">
+        Дізнатись більше
+      </a><p></p>
+
+    </div>
+    <div class="mdl-card__menu">
+      <button class="mdl-button mdl-js-ripple-effect">
+        <i class="material-icons">favorite_border</i>
+        <span>35</span>
+      </button>
+    </div>
+  <!--</div>-->
+<!--</div>-->

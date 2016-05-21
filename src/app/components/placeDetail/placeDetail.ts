@@ -2,8 +2,9 @@
  * Created by bubble on 20.04.16.
  */
 
-import {Component, Input} from 'angular2/core';
-import {Place} from '../place/place';
+import {Component, Input} from "angular2/core";
+import {Place} from "../entities/place";
+import {Router} from "angular2/router";
 
 @Component({
   selector: 'place-detail',
@@ -13,5 +14,13 @@ import {Place} from '../place/place';
 export class PlaceDetail{
   @Input()
   place: Place;
+  constructor(
+    private _router: Router
+  ){}
+  gotoDetail(place: Place){
+    let link = ['FullPlace', {objId: place.objectId}];
+    this._router.navigate(link);
+  }
+  
 }
 

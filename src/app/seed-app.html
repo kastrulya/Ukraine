@@ -1,31 +1,29 @@
-<h3>
-  Моя країна
-</h3>
-<nav>
-	<a [routerLink]=" ['/About'] ">
-    Про нас
-  </a>
-  |
-  <a [routerLink]=" ['/Places'] ">
-    Усі місця
-  </a>
-  |
-  <a [routerLink]=" ['/Register'] ">
-    Реєстрація
-  </a>
-  /
-  <a [routerLink]=" ['/Login'] ">
-    Увійти
-  </a>
-  |
-  <my-logout></my-logout>
-</nav>
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Моя країна</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" [routerLink]=" ['/About'] ">Про нас</a>
+        <a class="mdl-navigation__link" [routerLink]=" ['/Places'] ">Усі місця</a>
+        <auth></auth>
+      </nav>
+    </div>
+  </header>
+  <main class="mdl-layout__content">
+    <div class="page-content"><router-outlet></router-outlet></div>
+  </main>
+</div>
 
-<main>
-	<router-outlet></router-outlet>
-</main>
-
-
-<footer>
-  © 2016
+<footer class="mdl-mini-footer">
+  <div class="mdl-mini-footer__left-section">
+    <div class="mdl-logo">Моя країна</div>
+    <ul class="mdl-mini-footer__link-list">
+      <li><a href="#">Про нас</a></li>
+      <li><a href="#">Як це працює</a></li>
+    </ul>
+  </div>
 </footer>
