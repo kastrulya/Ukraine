@@ -6,6 +6,9 @@ import {Likes} from "../components/entities/like";
 import {DisplayTag} from '../components/entities/DisplayTag';
 import * as _ from "lodash";
 import Dictionary = _.Dictionary;
+import User = __Backendless.User;
+import {Tag} from "../components/entities/tag";
+import {Place} from "../components/entities/place";
 const Backendless = require('backendless');
 
 
@@ -30,6 +33,12 @@ export class LikeService {
         }
         return displayTags;
       });
+  }
+
+  addLike(place: Place, tag: Tag) {
+    var currentUser = Backendless.UserService.getCurrentUser()
+      .then(user=>new Likes(place, user, tag))
+      .then((like)=>Backendless.Persistence.of(Likes).save(like));
   }
 
 }

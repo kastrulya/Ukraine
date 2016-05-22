@@ -19,6 +19,7 @@ import {Auth} from "./components/auth/auth";
   pipes: [],
   directives: [ROUTER_DIRECTIVES, Auth],
   templateUrl: 'app/seed-app.html',
+  styleUrls: ['app/seed-app.css']
 })
 @RouteConfig([
   { path: '/about',      component: About,       name: 'About' },

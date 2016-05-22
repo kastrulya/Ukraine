@@ -10,10 +10,8 @@
 
 <div>
   <h2>{{place?.name}}</h2>
-  <p>Lorem ipsum</p>
-  <div class="button like" > ♥ {{count}} </div>
-    <!--<li *ngFor="#tag of tags">{{tag.tag.name}} {{tag.count}}</li>-->
-  <span class="tag" *ngFor="#tag of tags" >{{tag.tag.name}} {{tag.count}}</span>
+  <p>{{place?.description}}</p>
+    <all-tags [tags]="tags" [place]="place"></all-tags>
+    <!--<tag *ngFor="#tag of tags" [tag]="tag" [place]="place"></tag>-->
   <div class="button delete" (click)="delete()">X Delete</div>
-
 </div>

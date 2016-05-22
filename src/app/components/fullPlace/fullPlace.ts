@@ -7,13 +7,15 @@ import {PlaceService} from "../../services/placeService";
 import {LikeService} from "../../services/likeService";
 import {Place} from "../entities/place";
 import {DisplayTag} from "../entities/DisplayTag";
+import {AllTags} from "../tagsComponent/allTags/allTags";
 const Backendless = require('backendless');
 
 @Component({
   selector: 'full-place',
   templateUrl: 'app/components/full' +
   'Place/fullPlace.html',
-  styleUrls: ['app/components/fullPlace/fullPlace.css']
+  styleUrls: ['app/components/fullPlace/fullPlace.css'],
+  directives: [AllTags]
 })
 export class FullPlace implements OnInit {
   place:Place;
@@ -38,12 +40,6 @@ export class FullPlace implements OnInit {
       .then(place => this.place = place);
   }
 
-  like() {
-    Backendless.UserService.getCurrentUser().then(user => {
-      // this._likeService.likePlace(this.place, user);
-    });
-  }
-
   delete() {
     this._placeService.deletePlace(this.place).then(
       ()=> {
@@ -52,7 +48,6 @@ export class FullPlace implements OnInit {
       }
     );
   }
-
 
   editDescription() {
     console.log('description will be changed');
@@ -82,5 +77,9 @@ export class FullPlace implements OnInit {
       .getLikedTags(placeId)
       .then(tagsCount => this.tags = tagsCount);
   }
+  
+  // isOwner(){
+  //   return Backendless.UserService.getCurrentUser();
+  // }
 
 }
