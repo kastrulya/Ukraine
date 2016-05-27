@@ -11,13 +11,15 @@ import {Login} from "./components/auth/login/login";
 import {Auth} from "./components/auth/auth";
 //import {Logout} from './components/auth/logout/logout';
 
+import {Map} from './components/map/map';
+
 @Component({
   selector: 'seed-app',
   providers: [
     PlaceService, LikeService
   ],
   pipes: [],
-  directives: [ROUTER_DIRECTIVES, Auth],
+  directives: [ROUTER_DIRECTIVES, Auth, Map],
   templateUrl: 'app/seed-app.html',
   styleUrls: ['app/seed-app.css']
 })
@@ -27,7 +29,8 @@ import {Auth} from "./components/auth/auth";
   { path: '/place/:objId', component: FullPlace, name: 'FullPlace' },
   { path: 'places/add', component: NewPlace,     name: 'NewPlace' },
   { path: 'register', component: Register, name: 'Register' },
-  { path: 'login', component: Login, name: 'Login' }
+  { path: 'login', component: Login, name: 'Login' },
+  { path: 'map', component: Map, name: 'Map'}
 ])
 export class SeedApp {
 

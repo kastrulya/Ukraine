@@ -7,6 +7,7 @@ import {Router} from "angular2/router";
 import {PlaceDetail} from "../placeDetail/placeDetail";
 import {PlaceService} from "../../services/placeService";
 import {Place} from "../entities/place";
+
 const Backendless = require('backendless');
 
 @Component({

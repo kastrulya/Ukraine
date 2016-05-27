@@ -20,6 +20,19 @@ export class AddTag {
   }
 
   toggleField(){
-    
+
   }
+
+  saveTag(){
+    console.log(this.place);
+    let tagNameField = <HTMLInputElement>document.getElementById('tagName');
+    let tagName = tagNameField.value;
+    // this._likeService.addNewLike(this.place, tagName);
+  }
+
+  eventHandler(keyCode) {
+    if (keyCode=='13') this.saveTag();
+    return;
+  }
+
 }

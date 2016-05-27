@@ -18,7 +18,19 @@ export class TagDisplay{
   ){}
 
   likeTag(){
-    this._likeService.addLike(this.place, this.tag.tag);
+    this._likeService.addLike(this.place, this.tag.tag)
+      .then(()=>window.location.reload());
+    // window.location.reload();
+      // .then(
+      //   ()=>{
+      //     this._likeService.getDisplayTag(this.place, this.tag.tag);
+      //   })
+      // .then(tag=>{
+      //   console.log(tag);
+      //   this.tag=DisplayTag(this.tag.tag, tag.data.length);
+      //   console.log("displayTag:");
+      //   console.log(this.tag);
+      // });
   }
 
 }

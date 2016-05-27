@@ -9,6 +9,7 @@ import Dictionary = _.Dictionary;
 import User = __Backendless.User;
 import {Tag} from "../components/entities/tag";
 import {Place} from "../components/entities/place";
+import {TagDisplay} from "../components/tagsComponent/tagDisplay/tagDisplay";
 const Backendless = require('backendless');
 
 
@@ -17,6 +18,24 @@ export class LikeService {
   like:Likes;
 
   constructor() {
+  }
+
+  // getTag(tag:string): Promise<Tag>{
+  //   let query = new Backendless.DataQuery();
+  //   query.condition = "name='" + tag + "'";
+  //   return Backendless.Persistence.of(Tag).find(query);
+  // }
+
+  getDisplayTag(place:Place, tag: Tag) {
+    let query = new Backendless.DataQuery();
+    query.condition = "place.objectId='" + place.objectId + "' and tag.objectId='" + tag.objectId + "'";
+    return Backendless.Persistence.of(Likes).find(query);
+      // .then(res=>{
+      //   let dispTag = new DisplayTag(tag, res.totalObjects);
+      //   console.log("getDisplayTag:");
+      //   console.log(dispTag);
+      //   return dispTag;
+      // });
   }
 
   getLikedTags(placeID:string) {
@@ -36,9 +55,46 @@ export class LikeService {
   }
 
   addLike(place: Place, tag: Tag) {
-    var currentUser = Backendless.UserService.getCurrentUser()
-      .then(user=>new Likes(place, user, tag))
-      .then((like)=>Backendless.Persistence.of(Likes).save(like));
+    console.log("tag in addLike:");
+    console.log(tag);
+    return Backendless.UserService.getCurrentUser()
+      .then(user=>{
+        let like = new Likes(place, user, tag);
+        return Backendless.Persistence.of(Likes).save(like);
+      });
+  }
+
+  getTagByName(name: string): Promise<Tag> {
+    let query = new Backendless.DataQuery();
+    query.condition = "name='" + name + "'";
+    return Backendless.Persistence.of(Tag).find(query)
+      .then(res=>{
+          if(!res.data.length) throw new Error('Tag with such name isn\'t existed');
+          return res;
+        });
+  }
+
+  createNewTag(tagName: string): Promise<Tag> {
+    //прийом називається програмування через копання
+    return this.getTagByName(tagName)
+      .then(
+        res=>{
+          console.log(res);
+          return res.data[0];
+        },
+        err=>{
+          let tag = new Tag();
+          tag.name = tagName;
+          return Backendless.Persistence.of(Tag).save(tag);}
+      );
+  }
+
+  likeNewTag(tagName: string, place:Place) {
+    return this.createNewTag(tagName)
+      .then( tag=> {
+        console.log("created tag:");
+        console.log(tag);
+        this.addLike(place, tag)});
   }
 
 }

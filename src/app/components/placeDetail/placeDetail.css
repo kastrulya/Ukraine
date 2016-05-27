@@ -49,3 +49,7 @@ body {padding-top:50px;}
   color: #fff;
   transition: all 0.5s ease 0s;
 }
+
+.mdl-card__supporting-text {
+  max-height: 30%;
+}
