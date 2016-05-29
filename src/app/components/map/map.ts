@@ -4,7 +4,6 @@
 import {Component, OnInit, ViewEncapsulation} from 'angular2/core';
 import {MapService} from '../../services/mapService';
 const L = require('leaflet');
-const markerCluster = require('leaflet.markercluster');
 // import * as markerCluster from 'leaflet.markercluster';
 var geojson, map, info;
 

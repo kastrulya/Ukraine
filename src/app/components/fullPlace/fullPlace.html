@@ -10,9 +10,10 @@
 
 <div>
   <h2>{{place?.name}}</h2> <input type="text" #editTitle placeholder="New name">
-  <p>{{place?.description}}</p> <textarea name="descriptionPlaceEdit" #editDescription cols="30" rows="10"></textarea>
+  <p>{{place?.description}}</p> <textarea name="descriptionPlaceEdit" #editDescription cols="30" rows="1"></textarea>
     <all-tags [tags]="tags" [place]="place"></all-tags>
     <!--<tag *ngFor="#tag of tags" [tag]="tag" [place]="place"></tag>-->
   <div class="button delete" (click)="delete()">X Delete</div>
   <div class="button edit" (click)="edit(editTitle.value, editDescription.value)">Edit Place</div>
+  <div id="little_map" style="width: 300px; height: 300px;"></div>
 </div>

@@ -55,34 +55,17 @@ export class PlaceService {
   }
 
   getPlace(objId: string) : Promise<Place> {
-    return Backendless.Data.of(Place).findById(objId);
+    var query = new Backendless.DataQuery();
+    query.options = { relations: ["location"] };
+    // query.options = {relationsDepth:1};
+    query.condition="objectId='" + objId + "'" ;
+    return Backendless.Data.of(Place).findById(objId, 1);
   }
-
-  // updatePlace(place: Place) : Observable<Place>{
-  //   let url = this.placesURL + '/' + place.objectId;
-  //   return this._http.put(url, JSON.stringify(place) ,this._options)
-  //     .map(this.extractData)
-  //     .catch(this.handleError);
-  // }
-
-  // deletePlace(place: Place) {
-  //   let url = this.placesURL + '/' + place.objectId;
-  //   return this._http.delete(url, this._options)
-  //     .map(this.extractData)
-  //     .catch(this.handleError);
-  // }
 
   deletePlace(place:Place) {
     return Backendless.Data.of(Place).remove(place);
   }
 
-  // getUser(userId: string) {
-  //   let userUrl = 'https://api.backendless.com/v1/data/Users' + '/' + userId;
-  //   return this._http.get(userUrl, this._options)
-  //     .map(this.extractData)
-  //     .catch(this.handleError);
-  // }
-  
   updatePlace(place:Place) {
     return Backendless.Data.of(Place).save(place);
   }
