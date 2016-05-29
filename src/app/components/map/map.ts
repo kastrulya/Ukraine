@@ -2,163 +2,161 @@
  * Created by bubble on 26.05.16.
  */
 import {Component, OnInit, ViewEncapsulation} from 'angular2/core';
-import * as d3 from 'd3';
-// import * as topojson from 'ts-topojson';
-const topojson = require('ts-topojson');
+import {MapService} from '../../services/mapService';
+const L = require('leaflet');
+const markerCluster = require('leaflet.markercluster');
+// import * as markerCluster from 'leaflet.markercluster';
+var geojson, map, info;
+
+function highlightFeature(e) {
+  var layer = e.target;
+
+  layer.setStyle({
+    weight: 2,//5,
+    color: '#666',
+    dashArray: '',
+    // fillOpacity: 0.7
+  });
+
+  if (!L.Browser.ie && !L.Browser.opera) {
+    layer.bringToFront();
+  }
+  info.update(layer.feature.properties);
+}
+
+function zoomToFeature(e) {
+  map.fitBounds(e.target.getBounds());
+}
+
+function resetHighlight(e) {
+  geojson.resetStyle(e.target);
+  info.update();
+}
 
 @Component({
   selector: 'map',
-  template: `
-<div id="map_district">
-  <div id="textbox"></div>
-  <svg viewBox="0 0 900 600"></svg>
-</div>`,
+  template: `<div id="map"></div>`,
   styleUrls: ['app/components/map/map.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class Map implements OnInit{
-  ngOnInit(){
-    this.displayFunc();
+export class Map implements OnInit {
+
+  constructor(private _mapService:MapService) {
   }
 
-  displayFunc(){
-    var width = 900,
-      height = 600,
-      centered;
+  ngOnInit() {
+    this.displayMap();
+    this.addMarkers();
+  }
 
-    var geometry_center = {"latitude": 48.360833, "longitude": 31.1809725};
+  displayMap() {
+    var bounds = new L.latLngBounds([52.5, 21], [44, 41]);
 
-    var svg = d3.select("svg");
-
-    var projection = d3.geo.conicEqualArea()
-      .center([0, geometry_center.latitude])
-      .rotate([-geometry_center.longitude, 0])
-      .parallels([46, 52])
-      .scale(4000)
-      .translate([width / 2, height / 2]);
-
-    var path = d3.geo.path()
-      .projection(projection);
-
-    var topo_data = null;
-
-    d3.json("app/components/map/ukraine.json", function (error, ukraine_data) {
-      topo_data = ukraine_data;
-
-      var countries = topojson.feature(ukraine_data, ukraine_data.objects.countries);
-      d3.select("svg").selectAll(".country")
-        .data(countries.features)
-        .enter().append("path")
-        .attr("class", function (d) {
-          return "country " + d.id;
-        })
-        .attr("d", path);
-
-      d3.select("svg").append("path")
-        .datum(topojson.mesh(ukraine_data, ukraine_data.objects.countries, function (a, b) {
-          return a !== b;
-        }))
-        .attr("class", "country-boundary")
-        .attr("d", path);
-      d3.select("svg").append("path")
-        .datum(topojson.mesh(ukraine_data, ukraine_data.objects.countries, function (a, b) {
-          return a === b;
-        }))
-        .attr("class", "coastline")
-        .attr("d", path);
-
-      var water_group = d3.select("svg").append("g")
-        .attr("id", "water-resources");
-
-      var rivers = topojson.feature(ukraine_data, ukraine_data.objects.rivers);
-      water_group.selectAll(".river")
-        .data(rivers.features)
-        .enter().append("path")
-        .attr("class", "river")
-        .attr("name", function (d) {
-          return d.properties.name;
-        })
-        .attr("d", path)
-      ;
-
-      // Add lakes after rivers so that river lines connect reservoirs, not cross them.
-      var lakes = topojson.feature(ukraine_data, ukraine_data.objects.lakes);
-      water_group.selectAll(".lake")
-        .data(lakes.features)
-        .enter().append("path")
-        .attr("class", "lake")  // Note: not necessary a lake, it can be a reservoir.
-        .attr("name", function (d) {
-          return d.properties.name;
-        })
-        .attr("d", path);
-
-      var regions = topojson.feature(ukraine_data, ukraine_data.objects.regions);
-      d3.select("svg").selectAll(".region")
-        .data(regions.features)
-        .enter().append("path")
-        .classed("region", true)
-        .attr("id", function (d) {
-          return d.id;
-        })
-        .attr("d", path)
-        .on("mouseover", function (d) {
-          highlightRegion(d.id);
-          d3.event.stopPropagation();
-          var prop = d.properties;
-          var string = "<p><strong>Область: </strong>" + prop.localized_name.ua + "</p>";
-          d3.select("#textbox")
-            .html("")
-            .append("text")
-            .html(string);
-        });
-
-      d3.select("svg").append("path")
-        .datum(topojson.mesh(ukraine_data, ukraine_data.objects.regions, function (a, b) {
-          return a !== b;
-        }))
-        .classed("region-boundary", true)
-        .attr("d", path)
-      ;
-
-      d3.select("#map_district").append("ul")
-        .classed("regions-list", true)
-        .selectAll("a")
-        .data(regions.features.sort(function (a, b) {
-          return a.properties.localized_name.ua.localeCompare(b.properties.localized_name.ua);
-        }))
-        .enter().append("li").append("a")
-        .text(function (d) {
-          return d.properties.localized_name.ua;
-        })
-        .attr("href", "javascript:void(0)")
-        .on("click", function (d) {
-          highlightRegion(d.id);
-          d3.event.stopPropagation();
-        });
-      window.addEventListener("click", clearRegionHighlight);
+    map = L.map('map', {
+      center: new L.LatLng(48.46, 30.87),
+      zoom: 6,
+      maxZoom: 18,
+      minZoom: 6,
+      zoomControl: false,
+      inertia: false,
+      attributionControl: false,
+      maxBounds: bounds
     });
 
-    function clearRegionHighlight() {
-      d3.select("svg").select(".region.selected")
-        .classed("selected", false);
-      d3.select("svg").select(".region-boundary.selected")
-        .remove();
-    }
+    L.tileLayer(
+      'https://api.mapbox.com/styles/v1/kastrulya/ciopmkl6g0052i8nmlnjw6iww/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoia2FzdHJ1bHlhIiwiYSI6ImNpb3Bsdm92dTAwMDJ2bG0xenEwZmJlYm4ifQ.nsPNZQ726nMQtszDGhDX3w',
+      {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        accessToken: 'pk.eyJ1Ijoia2FzdHJ1bHlhIiwiYSI6ImNpb3Bsdm92dTAwMDJ2bG0xenEwZmJlYm4ifQ.nsPNZQ726nMQtszDGhDX3w'
+    }).addTo(map);
 
-    function highlightRegion(regionId) {
-      clearRegionHighlight();
-      d3.select("svg").select("#" + regionId)
-        .classed("selected", true);
-      d3.select("svg").append("path")
-        .datum(topojson.mesh(topo_data, topo_data.objects.regions, function (a, b) {
-          return (a.id === regionId) || (b.id == regionId);
-        }))
-        .classed({"region-boundary": true, "selected": true})
-        .attr("d", path);
-    }
-
-    d3.select(self.frameElement)
-      .style("width", width + "px")
-      .style("height", "800px");
+    this.createMask();
+    this.createDistricts();
+    //Disable drag on min zoom
+    map.on('drag', function () {
+      map.panInsideBounds(bounds, {animate: false});
+    });
+    this.createInfo();
   }
+
+  onEachFeature(feature, layer) {
+    layer.on({
+      mouseover: highlightFeature,
+      mouseout: resetHighlight,
+      click: zoomToFeature
+    });
+  }
+
+  createMask() {
+    //Hide other countries with mask
+    L.Mask = L.Polygon.extend({
+      options: {
+        stroke: false,
+        color: '#1b3716',// 'white',//'rgb(152,152,152)',//'#1b3716',
+        fillOpacity:/* 1,*/ 0.8,
+        clickable: false,
+        outerBounds: new L.LatLngBounds([-90, -360], [90, 360])
+      },
+
+      initialize: function (latLngs, options) {
+        var outerBoundsLatLngs = [
+          this.options.outerBounds.getSouthWest(),
+          this.options.outerBounds.getNorthWest(),
+          this.options.outerBounds.getNorthEast(),
+          this.options.outerBounds.getSouthEast()
+        ];
+        L.Polygon.prototype.initialize.call(this, [outerBoundsLatLngs, latLngs], options);
+      },
+    });
+
+    L.mask = function (latLngs, options) {
+      return new L.Mask(latLngs, options);
+    };
+
+    L.mask(this._mapService.ukraineMask).addTo(map);
+  }
+
+  createDistricts() {
+    function style(feature) {
+      return {
+        // fillColor: 'rgb(22,55,878)',
+        weight: 2,
+        // opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        // fillOpacity: 0.7
+      };
+    }
+
+    geojson = L.geoJson(this._mapService.ukraine_arr, {
+      style: style,
+      onEachFeature: this.onEachFeature
+    }).addTo(map);
+  }
+
+  createInfo() {
+    info = L.control();
+
+    info.onAdd = function () {
+      this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+      this.update();
+      return this._div;
+    };
+
+// method that we will use to update the control based on feature properties passed
+    info.update = function (props) {
+      this._div.innerHTML = '<h4>Область</h4>' + (props ?
+        '<b>' + props.name + '</b>'
+          : 'Оберіть область');
+    };
+
+    info.addTo(map);
+  }
+
+  addMarkers() {
+    // map.addLayer(markers);
+    var marker = L.marker([50.45, 30.52]).addTo(map);
+    marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+  }
+
 }

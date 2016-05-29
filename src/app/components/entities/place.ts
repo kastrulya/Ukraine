@@ -2,6 +2,7 @@ import {Likes} from "./like";
 
 export class Place {
   objectId : string;
+  location: Backendless.GeoPoint;
   constructor(
     public name : string,
     public description : string

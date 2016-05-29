@@ -1,91 +1,42 @@
-.region {
-  /*fill: none;*/
-  pointer-events: all;
+#map {
+  width: 80%;
+  height: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-svg {
-  background-color: rgb(191, 216, 242);
+.info {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  width: 200px;
+}
+.info h4 {
+  margin: 0 0 5px;
+  color: #777;
 }
 
-.country {
-  fill: #eee;
+.leaflet-zoom-anim .leaflet-zoom-animated {
+  -webkit-transition: -webkit-transform 750ms linear;
+  -moz-transition:    -moz-transform 750ms linear;
+  -o-transition:      -o-transform 750ms linear;
+  transition:         transform 750ms linear;
+}
+.leaflet-zoom-anim .leaflet-tile,
+.leaflet-pan-anim .leaflet-tile,
+.leaflet-touching .leaflet-zoom-animated {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
 }
 
-.country.UKR {
-  fill: #fff;
+.leaflet-zoom-anim .leaflet-zoom-hide {
+  visibility: hidden;
 }
 
-.country-boundary {
-  fill: none;
-  stroke: #aaa;
-}
-
-.region {
-  fill: none;
-}
-
-.region.selected {
-  fill: rgba(252, 248, 227, 0.8);
-}
-
-.region-boundary {
-  fill: none;
-  stroke: #777;
-  stroke-dasharray: 2,2;
-  stroke-linejoin: round;
-}
-
-.region-boundary.selected {
-  stroke-dasharray: none;
-}
-
-.coastline, .river, .lake {
-  stroke: rgb(83, 168, 231);
-}
-
-.coastline, .river {
-  fill: none;
-}
-
-.lake {
-  fill: rgb(191, 216, 242);
-}
-
-.regions-list {
-  padding-left: 1em;
-  column-width: 14em;
-  -webkit-column-width: 14em;
-  -moz-column-width: 14em;
-  width: 90%;
-  margin: 0 auto;
-  /*color: darkblue;*/
-}
-ul.regions-list li a{
-  color: #0d47a1 !important;
-}
-
-
-#textbox {
-  position: absolute;
-  top: 50px;
-  left:150px;
-  width: 275px;
-  height: 20px;
-}
-
-#textbox text p {
-  font-family: Arial, Helvetica;
-  font-size: .8em;
-  margin: 0;
-}
-
-#map_district {
-  width: 80% ;
-  margin: 0 auto;
-}
-
-#map_district svg {
-  /*width: 100%;*/
-}
 
 

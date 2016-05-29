@@ -9,6 +9,8 @@ import {Place} from "../entities/place";
 import {DisplayTag} from "../entities/DisplayTag";
 import {AllTags} from "../tagsComponent/allTags/allTags";
 const Backendless = require('backendless');
+// import GeoPoint = __Backendless.GeoPoint;
+
 
 @Component({
   selector: 'full-place',
@@ -82,4 +84,16 @@ export class FullPlace implements OnInit {
   //   return Backendless.UserService.getCurrentUser();
   // }
 
+  edit(newTitle, newDescription){
+    // editDescription.value();
+    this.place.name = newTitle;
+    this.place.description = newDescription;
+    
+    this.place.location = new Backendless.GeoPoint();
+    this.place.location.latitude = 55.332;
+    this.place.location.longitude = 30.453;
+    
+    this._placeService.updatePlace(this.place);
+  }
+  
 }
